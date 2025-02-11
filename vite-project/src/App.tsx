@@ -5,22 +5,16 @@ import { useState } from "react";
 import { produce } from "immer";
 import { Cart } from "./components/Cart";
 import { NavBar } from "./components/NavBar";
+import { ExpandableText } from "./components/ExpandableText";
 
 function App() {
-  const [cartItems, setCartItems] = useState(["Product 1", "Product 2"]);
-
-  const addCart = () => {
-    setCartItems(
-      produce((draft) => {
-        draft.push(`Product ${cartItems.length + 1}`);
-      })
-    );
-  };
-
   return (
     <>
-      <NavBar cartItemsCount={cartItems.length}></NavBar>
-      <Cart cartItems={cartItems} addCart={addCart} />
+      <ExpandableText maxCharacter={150}>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere
+        accusamus sequi vel fuga aut eum magnam quaerat eius distinctio, dolorum
+        minus!
+      </ExpandableText>
     </>
   );
 }
