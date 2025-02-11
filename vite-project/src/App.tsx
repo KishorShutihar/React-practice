@@ -3,68 +3,24 @@ import { Button } from "./components/Button";
 import { Like } from "./components/Like";
 import { useState } from "react";
 import { produce } from "immer";
+import { Cart } from "./components/Cart";
+import { NavBar } from "./components/NavBar";
 
 function App() {
-  const countries = ["Nepal", "India", "China", "Pakistan"];
-  const [arrOfObj, setArrOfObj] = useState([
-    { name: "Kishor", age: 25, bachelor: true },
-    { name: "Rohit", age: 25, bachelor: false },
-  ]);
+  const [cartItems, setCartItems] = useState(["Product 1", "Product 2"]);
 
-  const handleClick = () => {
-    //add
-    // setArrOfObj([...arrOfObj, { name: "samiskhya", age: 30, bachelor: false }]);
-
-    // setArrOfObj(
-    //   produce((draft) => {
-    //     draft.push({ name: "samiskhya", age: 30, bachelor: false });
-    //   })
-    // );
-
-    //update
-    // setArrOfObj(
-    //   arrOfObj.map((arr) => {
-    //     if (arr.name == "Kishor") {
-    //       arr.name = "Kishan";
-    //     }
-    //     return arr;
-    //   })
-    // );
-
-    // setArrOfObj(
-    //   produce((draft) => {
-    //     const findable = draft.find((e) => e.name == "Kishor");
-    //     if (findable) {
-    //       findable.name = "Kishan";
-    //     }
-    //   })
-    // );
-
-    //delete
-    // setArrOfObj(arrOfObj.filter((arr) => arr.name != "Kishor"));
-
-    setArrOfObj(
+  const addCart = () => {
+    setCartItems(
       produce((draft) => {
-        const someVal = draft.filter((arr) => arr.name !== "Kishor");
-        return someVal;
+        draft.push(`Product ${cartItems.length + 1}`);
       })
     );
   };
 
-  console.log(arrOfObj);
-
   return (
     <>
-      {/* <ListGroup
-        items={countries}
-        heading="Countries"
-        onSelectItem={() => console.log("Hello")}
-      /> */}
-      <button onClick={handleClick}>Button</button>
-      {arrOfObj.map((value, index) => (
-        <p key={index}>{value.name}</p>
-      ))}
-      <Like onClick={() => console.log("Clicked")} />
+      <NavBar cartItemsCount={cartItems.length}></NavBar>
+      <Cart cartItems={cartItems} addCart={addCart} />
     </>
   );
 }
