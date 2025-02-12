@@ -1,20 +1,61 @@
-import { ListGroup } from "./components/ListGroup";
-import { Button } from "./components/Button";
-import { Like } from "./components/Like";
+import { Form } from "./components/Form";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Table } from "./components/Table";
 import { useState } from "react";
+import {
+  CATEGORIES,
+  Category,
+  ExpenseData,
+} from "./components/interfaces/expense";
 import { produce } from "immer";
-import { Cart } from "./components/Cart";
-import { NavBar } from "./components/NavBar";
-import { ExpandableText } from "./components/ExpandableText";
+import { useTheme } from "styled-components";
 
 function App() {
+  const [expenses, setExpenses] = useState<ExpenseData[]>([
+    {
+      description: "milk",
+      amount: 2.5,
+      category: "Groceries",
+    },
+    {
+      description: "bread",
+      amount: 10.5,
+      category: "Groceries",
+    },
+  ]);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const onFormSubmit = (data: ExpenseData) => {
+    const newExpenses = [...expenses, data];
+    setExpenses(newExpenses);
+  };
+
+  const visibleExpenses = selectedCategory
+    ? expenses.filter((expense) => {
+        if (!CATEGORIES.includes(expense.category)) {
+          return true;
+        }
+        return expense.category == selectedCategory;
+      })
+    : expenses;
+
+  const onDelete = (expenseDesc: string) => {
+    const newExpenses = expenses.filter(
+      (expense) => expense.description !== expenseDesc
+    );
+    setExpenses(newExpenses);
+  };
+
   return (
     <>
-      <ExpandableText maxCharacter={150}>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Facere
-        accusamus sequi vel fuga aut eum magnam quaerat eius distinctio, dolorum
-        minus!
-      </ExpandableText>
+      <Form onSubmit={onFormSubmit} />
+      <br />
+      <Table
+        data={visibleExpenses}
+        onFilterChange={(category) => setSelectedCategory(category)}
+        onDelete={onDelete}
+      />
     </>
   );
 }
