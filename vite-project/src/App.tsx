@@ -2,11 +2,7 @@ import { Form } from "./components/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Table } from "./components/Table";
 import { useState } from "react";
-import {
-  CATEGORIES,
-  Category,
-  ExpenseData,
-} from "./components/interfaces/expense";
+import { CATEGORIES, ExpenseData } from "./components/interfaces/expense";
 import "./index.css";
 
 function App() {
@@ -30,14 +26,12 @@ function App() {
     setExpenses(newExpenses);
   };
 
-  const visibleExpenses = selectedCategory
-    ? expenses.filter((expense) => {
-        if (!CATEGORIES.includes(expense.category)) {
-          return true;
-        }
-        return expense.category == selectedCategory;
-      })
-    : expenses;
+  const visibleExpenses =
+    selectedCategory === "All Categories"
+      ? expenses
+      : selectedCategory
+      ? expenses.filter((expense) => expense.category === selectedCategory)
+      : expenses;
 
   const onDelete = (expenseDesc: string) => {
     const newExpenses = expenses.filter(

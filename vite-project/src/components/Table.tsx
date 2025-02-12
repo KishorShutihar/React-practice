@@ -9,13 +9,17 @@ interface TableProps {
 }
 
 export const Table = ({ data, onFilterChange, onDelete }: TableProps) => {
-  const [filter, setFilter] = useState<Category>(CATEGORIES[0]);
+  let filterCategory: Category;
 
-  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCategory = e.target.value as Category;
-    setFilter(selectedCategory);
-    onFilterChange(selectedCategory);
+  const onChange = () => {
+    if (filterRef.current?.value) {
+      filterCategory = filterRef.current?.value as Category;
+    }
+
+    onFilterChange(filterCategory);
   };
+
+  const filterRef = useRef<HTMLSelectElement>(null);
 
   return (
     <>
@@ -24,6 +28,7 @@ export const Table = ({ data, onFilterChange, onDelete }: TableProps) => {
           name="filter"
           className="form-select"
           id="filter"
+          ref={filterRef}
           onChange={onChange}
         >
           {CATEGORIES.map((category, index) => {
