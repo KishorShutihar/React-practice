@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CATEGORIES, Category, ExpenseData } from "./interfaces/expense";
 
 interface TableProps {
@@ -10,7 +10,6 @@ interface TableProps {
 
 export const Table = ({ data, onFilterChange, onDelete }: TableProps) => {
   const [filter, setFilter] = useState<Category>(CATEGORIES[0]);
-  // console.log("hello this is data", data);
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = e.target.value as Category;

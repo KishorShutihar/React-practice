@@ -1,27 +1,36 @@
-import React, { useState } from "react";
-import { CATEGORIES, ExpenseData } from "./interfaces/expense";
+import React, { useRef, useState } from "react";
+import { CATEGORIES, Category, ExpenseData } from "./interfaces/expense";
 
 type FormProps = {
   onSubmit: (data: ExpenseData) => void;
 };
 
 export const Form = ({ onSubmit }: FormProps) => {
-  const [formData, setFormData] = useState<ExpenseData>({
+  const formData: ExpenseData = {
     description: "",
     amount: 0,
     category: CATEGORIES[0],
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { id, value } = e.target;
-    console.log(id, value);
-    setFormData({ ...formData, [id]: value });
   };
+
+  const descriptionRef = useRef<HTMLInputElement>(null);
+  const amountRef = useRef<HTMLInputElement>(null);
+  const categoryRef = useRef<HTMLSelectElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (
+      !descriptionRef.current?.value ||
+      !amountRef.current?.value ||
+      !categoryRef.current?.value
+    ) {
+      console.error("One or more refs are null");
+      return;
+    }
+
+    formData.description = descriptionRef.current.value;
+    formData.amount = Number(amountRef.current.value);
+    formData.category = categoryRef.current.value as Category;
     onSubmit(formData);
   };
 
@@ -31,28 +40,24 @@ export const Form = ({ onSubmit }: FormProps) => {
         <div className="form-check">
           <label htmlFor="description">Description</label>
           <input
+            ref={descriptionRef}
             type="text"
             id="description"
             className="form-control"
-            onChange={handleChange}
           />
         </div>
         <div className="form-check">
           <label htmlFor="amount">Amount</label>
           <input
+            ref={amountRef}
             type="number"
             className="form-control"
             id="amount"
-            onChange={handleChange}
           />
         </div>
         <div className="form-check">
           <label htmlFor="category">Category</label>
-          <select
-            className="form-control"
-            id="category"
-            onChange={handleChange}
-          >
+          <select ref={categoryRef} className="form-control" id="category">
             {CATEGORIES.map((category, index) =>
               category !== "All Categories" ? (
                 <option key={index}>{category}</option>

@@ -7,8 +7,7 @@ import {
   Category,
   ExpenseData,
 } from "./components/interfaces/expense";
-import { produce } from "immer";
-import { useTheme } from "styled-components";
+import "./index.css";
 
 function App() {
   const [expenses, setExpenses] = useState<ExpenseData[]>([
